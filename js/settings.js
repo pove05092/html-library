@@ -5,6 +5,7 @@ import { h, icon, toast, confirmDialog } from './ui.js';
 import { saveSettings, forgetSettings, setToken, getToken, DEFAULT_SETTINGS, loadSettings } from './sync.js';
 import { testConnection, GitHubError } from './github.js';
 import { formatBytes, STRINGS } from './logic.js';
+import { installSection, installChip } from './install.js';
 
 const TOKEN_NEW_URL = 'https://github.com/settings/personal-access-tokens/new';
 /** 新規作成ページの事前入力（公式ドキュメントに載っている引数だけ：name・description・expires_in・<permission>）。倉庫の選択は事前入力できないので手順に書く */
@@ -29,6 +30,7 @@ function guide(device, repoName) {
 }
 
 export function renderWelcome({ host, go }) {
+  const chip = installChip(STRINGS.appName);
   const root = h('div', { class: 'welcome', dataset: { t: 'welcome' } },
     h('div', { class: 'wl-card' },
       h('div', { class: 'wl-logo' }, icon('pages')),
@@ -40,9 +42,10 @@ export function renderWelcome({ host, go }) {
         h('li', null, h('b', { text: '持ち歩く：' }), '一度開いた物・「端末に保存」した物は、電波が無くても開けます。ゲームの進捗は保存しません。'),
         h('li', null, h('b', { text: '残る：' }), '自分だけの非公開の倉庫（GitHub）に保存。PC とスマホで同じものが見えます。')),
       h('p', { class: 'hint', text: 'はじめに、この端末用のトークン（倉庫専用の合い言葉）を設定します。5 分ほどです。' }),
-      h('button', { class: 'btn primary big', type: 'button', dataset: { t: 'welcome-start' }, onclick: () => go('#/settings') }, 'はじめる（トークンを設定）')));
+      h('button', { class: 'btn primary big', type: 'button', dataset: { t: 'welcome-start' }, onclick: () => go('#/settings') }, 'はじめる（トークンを設定）'),
+      chip.el));
   host.append(root);
-  return { destroy() { root.remove(); } };
+  return { destroy() { chip.destroy(); root.remove(); } };
 }
 
 export function renderSettings({ engine, host, go, firstRun }) {
@@ -105,12 +108,14 @@ export function renderSettings({ engine, host, go, firstRun }) {
   }
   refreshCache();
 
+  const inst = installSection(STRINGS.appName);
   const root = h('div', { class: 'settings', dataset: { t: 'settings' } },
     h('header', { class: 'set-top' },
       h('button', { class: 'btn icon plain', type: 'button', 'aria-label': '戻る', dataset: { t: 'settings-back' }, onclick: () => (engine.configured ? go('#/', { replace: true }) : go('#/welcome', { replace: true })) }, icon('back')),
       h('h1', { text: '設定' })),
     h('div', { class: 'set-body' },
       firstRun ? h('p', { class: 'hint', text: 'はじめに、この端末用のトークンを設定してください。' }) : null,
+      inst.el,
       guide(fields.device.value, cur.repo || DEFAULT_SETTINGS.repo),
       h('section', { class: 'set-sec' }, h('h2', { text: '接続' }),
         field('持ち主', fields.owner), field('倉庫', fields.repo), field('ブランチ', fields.branch),
@@ -131,7 +136,7 @@ export function renderSettings({ engine, host, go, firstRun }) {
             await engine.reconfigure(); toast('接続情報を消しました'); go('#/welcome', { replace: true });
           }
         } }, icon('trash'), 'この端末から接続情報を消す'),
-        h('p', { class: 'hint', text: `${STRINGS.appName} v1` }))));
+        h('p', { class: 'hint', text: `${STRINGS.appName} v2` }))));
   host.append(root);
-  return { destroy() { root.remove(); } };
+  return { destroy() { inst.destroy(); root.remove(); } };
 }

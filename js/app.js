@@ -5,10 +5,12 @@ import { h, clear, toast } from './ui.js';
 import { createSyncPill } from './syncpill.js';
 import { renderLibrary } from './library.js';
 import { renderSettings, renderWelcome } from './settings.js';
+import { initInstall } from './install.js';
 import { startUpload } from './upload.js';
 import { Viewer } from './viewer.js';
 import * as L from './logic.js';
 
+initInstall();   // beforeinstallprompt を取りこぼさないよう最初に聞き耳を立てる
 const engine = new SyncEngine();
 const appEl = document.getElementById('app');
 let current = null, navCount = 0, currentHash = null, routeSeq = 0;
