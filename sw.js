@@ -2,7 +2,7 @@
 //  - 殻（HTML・CSS・JS・アイコン・箱）はネットワーク優先、つながらなければキャッシュ → オフラインでも起動し、端末に保存した HTML を開ける。更新は次に開いた時に届く。
 //  - 同梱の three.js（vendor/three/。箱が算数の工場のゲームの CDN の URL を差し替える先）は不変なのでキャッシュ優先＝オフラインでも 3D のゲームが動く。
 //  - api.github.com など別のオリジンは一切触らない（キャッシュしない）。作品の HTML は IndexedDB 側にある。
-const VERSION = 'v2-2026-11-07';
+const VERSION = 'v3-2026-11-07';
 const SHELL = `hl-shell-${VERSION}`;
 const RUNTIME = `hl-runtime-${VERSION}`;
 const CORE = [

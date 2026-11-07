@@ -3,7 +3,7 @@
  "short_name": "HTMLライブラリ",
  "description": "ゲーム・指南書・ドリルなどの HTML を一か所にためて、PC でもスマホでも開く",
  "lang": "ja",
- "id": "./",
+ "id": "/html-library/",
  "start_url": "./",
  "scope": "./",
  "display": "standalone",

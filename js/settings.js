@@ -136,7 +136,7 @@ export function renderSettings({ engine, host, go, firstRun }) {
             await engine.reconfigure(); toast('接続情報を消しました'); go('#/welcome', { replace: true });
           }
         } }, icon('trash'), 'この端末から接続情報を消す'),
-        h('p', { class: 'hint', text: `${STRINGS.appName} v2` }))));
+        h('p', { class: 'hint', text: `${STRINGS.appName} v3` }))));
   host.append(root);
   return { destroy() { inst.destroy(); root.remove(); } };
 }
